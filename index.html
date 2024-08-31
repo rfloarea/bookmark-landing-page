@@ -7,7 +7,24 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Bookmarks</h1>
+  <header>
+    <h1>Bookmarks</h1>
+  </header>
+  <form class="bookmark-form">
+    <input
+      type="url"
+      name="url"
+      id="url-input"
+      placeholder="Enter URL"
+      pattern="http://*"
+      required
+    >
+    <button id="add-bookmark">Add Bookmark</button>
+    <button id="delete-all">Delete All Bookmarks</button>
+  </form>
+  <ul id="bookmark-list">
+    <li>placeholder bookmark</li>
+  </ul>
   <script src="script.js"></script>
 </body>
 </html>
