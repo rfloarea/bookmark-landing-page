@@ -7,7 +7,7 @@ const addBookmarkBtn = document.querySelector('#add-bookmark');
 const deleteAllBookmarksBtn = document.querySelector('#delete-all');
 const bookmarkList = document.querySelector('#bookmark-list');
 
-// attach even listeners to our DOM elements
+// attach event listeners to our DOM elements
 
 addBookmarkBtn.addEventListener('click', addBookmark);
 deleteAllBookmarksBtn.addEventListener('click', deleteAllBookmarks);
@@ -19,6 +19,9 @@ function addBookmark() {
 
 function deleteAllBookmarks() {
   console.log('delete all bookmarks');
+  while(bookmarkList.firstChild) {
+    bookmarkList.removeChild(bookmarkList.lastChild)
+  }
 };
 
 // create a new list item
