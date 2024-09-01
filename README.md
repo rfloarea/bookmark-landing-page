@@ -13,5 +13,4 @@ Things learned:
 TODO
 
 - validate urls
-- edit functionality
 - stylzzzzzzz

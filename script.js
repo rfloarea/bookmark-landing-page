@@ -59,9 +59,31 @@ function handleGoToLink(url) {
   console.log(url, ' clicked');
   window.open(url, '_blank');
 };
+
 function handleEditBookmark(newBookmark) {
   console.log(newBookmark, ' edited');
+  const url = prompt('Edit the url');
+  newBookmark.textContent = url;
+
+  // recreate the buttons
+  const goToBookmarkBtn = document.createElement('button');
+  const editBookmarkBtn = document.createElement('button');
+  const deleteBookmarkBtn = document.createElement('button');
+
+  // fill em up
+  goToBookmarkBtn.textContent = 'Go to link';
+  editBookmarkBtn.textContent = 'Edit';
+  deleteBookmarkBtn.textContent = 'Delete';
+  // load em up
+  newBookmark.appendChild(goToBookmarkBtn);
+  newBookmark.appendChild(editBookmarkBtn);
+  newBookmark.appendChild(deleteBookmarkBtn);
+  // give em life
+  goToBookmarkBtn.addEventListener('click', () => handleGoToLink(url));
+  editBookmarkBtn.addEventListener('click', () => handleEditBookmark(newBookmark));
+  deleteBookmarkBtn.addEventListener('click', () => handleDeleteBookmark(newBookmark));
 };
+
 function handleDeleteBookmark(newBookmark) {
   console.log(newBookmark, ' deleted')
   newBookmark.remove()
