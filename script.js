@@ -1,13 +1,16 @@
 console.log("connected")
 
+// hardcoded elements
 const urlInput = document.querySelector('#url-input');
 const addBookmarkBtn = document.querySelector('#add-bookmark');
 const deleteAllBookmarksBtn = document.querySelector('#delete-all');
 const bookmarkList = document.querySelector('#bookmark-list');
 
+// give them actions
 addBookmarkBtn.addEventListener('click', addBookmark);
 deleteAllBookmarksBtn.addEventListener('click', deleteAllBookmarks);
 
+// callbacks for hardcoded elements
 function addBookmark() {
   if (!urlInput.value) {
     return
@@ -22,23 +25,32 @@ function deleteAllBookmarks() {
   }
 };
 
+// fun stuff!
 function createNewBookmark() {
   const url = urlInput.value;
 
+  // parent li element
   const newBookmark = document.createElement('li');
-  newBookmark.textContent = `${url}`;
+  newBookmark.setAttribute('class', 'bookmark')
   bookmarkList.appendChild(newBookmark);
+  
+  // child p element
+  const bookmarkLink = document.createElement('p');
+  bookmarkLink.textContent = `${url}`;
+  newBookmark.appendChild(bookmarkLink);
 
+  // child button group element
   createBookmarkButtonGroup(newBookmark, url)
 
+  // clear input field
   urlInput.value = '';
 };
 
+// callbacks for dynamic elements
 function handleGoToLink(url) {
   console.log(url, ' clicked');
   window.open(url, '_blank');
 };
-
 function handleEditBookmark(newBookmark) {
   console.log(newBookmark, ' edited');
   const url = prompt('Edit the url');
@@ -46,15 +58,16 @@ function handleEditBookmark(newBookmark) {
 
   createBookmarkButtonGroup(newBookmark, url)
 };
-
 function handleDeleteBookmark(newBookmark) {
   console.log(newBookmark, ' deleted')
   newBookmark.remove()
 };
 
+// well named function :P
 function createBookmarkButtonGroup(newBookmark, url) {
 
   // give them names
+  const buttonGroupDiv = document.createElement('div');
   const goToBookmarkBtn = document.createElement('button');
   const editBookmarkBtn = document.createElement('button');
   const deleteBookmarkBtn = document.createElement('button');
@@ -65,9 +78,10 @@ function createBookmarkButtonGroup(newBookmark, url) {
   deleteBookmarkBtn.textContent = 'Delete';
 
   // give them a home
-  newBookmark.appendChild(goToBookmarkBtn);
-  newBookmark.appendChild(editBookmarkBtn);
-  newBookmark.appendChild(deleteBookmarkBtn);
+  newBookmark.appendChild(buttonGroupDiv);
+  buttonGroupDiv.appendChild(goToBookmarkBtn);
+  buttonGroupDiv.appendChild(editBookmarkBtn);
+  buttonGroupDiv.appendChild(deleteBookmarkBtn);
 
   // give them life
   goToBookmarkBtn.addEventListener('click', () => handleGoToLink(url));
