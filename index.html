@@ -19,18 +19,23 @@
       pattern="http://*"
       required
     >
-    <button id="add-bookmark">Add Bookmark</button>
-    <button id="delete-all">Delete All Bookmarks</button>
+    <div class="form-buttons">
+      <button id="add-bookmark">Add Bookmark</button>
+      <button id="delete-all">Delete All Bookmarks</button>
+    </div>
   </form>
   <ul id="bookmark-list">
     <!-- list of bookmarks are added here -->
-    <!-- example -->
-     <!-- 
-    <li>http:\\www.google.com</li>
-    
-     
-     
-     -->
+    <!-- example 
+    <li class="bookmark">
+      <p class="url">Link here to cool webthing</p>
+      <div class="button-group">
+        <button>Go</button>
+        <button>Edit</button>
+        <button>Delete</button>
+      </div>
+    </li>
+    -->
   </ul>
   <script src="script.js"></script>
 </body>
