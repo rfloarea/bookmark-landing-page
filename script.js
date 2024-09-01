@@ -12,6 +12,9 @@ deleteAllBookmarksBtn.addEventListener('click', deleteAllBookmarks);
 
 // click handlers
 function addBookmark() {
+  if (!urlInput.value) {
+    return
+  }
   console.log('add bookmark');
   createNewBookmark();
 };
