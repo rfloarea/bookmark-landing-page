@@ -46,7 +46,7 @@ function createNewBookmark() {
   newBookmark.appendChild(deleteBookmarkBtn);
 
   // give them orders
-  goToBookmarkBtn.addEventListener('click', () => handleGoToLink(newBookmark));
+  goToBookmarkBtn.addEventListener('click', () => handleGoToLink(url));
   editBookmarkBtn.addEventListener('click', () => handleEditBookmark(newBookmark));
   deleteBookmarkBtn.addEventListener('click', () => handleDeleteBookmark(newBookmark));
 
@@ -55,8 +55,9 @@ function createNewBookmark() {
 };
 
 // click handlers
-function handleGoToLink(newBookmark) {
-  console.log(newBookmark, ' clicked');
+function handleGoToLink(url) {
+  console.log(url, ' clicked');
+  window.open(url, '_blank');
 };
 function handleEditBookmark(newBookmark) {
   console.log(newBookmark, ' edited');
