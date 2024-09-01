@@ -12,5 +12,5 @@ Things learned:
 
 TODO
 
-- validate urls
 - stylzzzzzzz
+- refactor code
