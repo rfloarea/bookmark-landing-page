@@ -18,11 +18,14 @@ function addBookmark() {
   console.log('add bookmark');
   createNewBookmark();
 };
+
 function deleteAllBookmarks() {
   console.log('delete all bookmarks');
   while(bookmarkList.firstChild) {
     bookmarkList.removeChild(bookmarkList.lastChild)
   }
+  
+  localStorage.clear();
 };
 
 // fun stuff!
@@ -40,10 +43,28 @@ function createNewBookmark() {
   newBookmark.appendChild(bookmarkLink);
 
   // child button group element
-  createBookmarkButtonGroup(newBookmark, url)
+  createBookmarkButtonGroup(newBookmark, url);
 
-  // clear input field
+  // TODO: add to local storage
+  // storage test stuff!!
+  // what if we just create a new key for each url,
+  // rather than creating an array object
+
+  setNewItem(url);
+  
+  
   urlInput.value = '';
+};
+
+localStorage.setItem('counter', JSON.stringify(0));
+
+function setNewItem(url) {
+  let counter = JSON.parse(localStorage.getItem('counter'));
+  console.log(counter);
+  counter = counter + 1;
+  console.log(counter);
+  localStorage.setItem('url'+`${counter}`, JSON.stringify(`${url}`));
+  localStorage.setItem('counter', JSON.stringify(counter));
 };
 
 // callbacks for dynamic elements
