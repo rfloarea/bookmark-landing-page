@@ -16,7 +16,7 @@ header {
   text-align: center;
 }
 
-form {
+.bookmark-form {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -31,7 +31,8 @@ input {
   border: none;
   border-radius: 0.5em;
   padding: 10px;
-  flex: 1;
+  /* flex: 1; */
+  margin: 0 1rem;
   font-family: monospace;
 }
 

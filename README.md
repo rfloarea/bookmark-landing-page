@@ -12,6 +12,7 @@ Things learned:
 - Debugging is fun.
 - Restructuring code is fun.
 - Including cute little comments in the code as landmarks is fun.
+- Thinking through the data structure I want is very important. I could have saved many key strokes if I had done more design/planning.
 
 TODO
 

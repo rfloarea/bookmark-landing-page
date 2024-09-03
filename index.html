@@ -12,16 +12,21 @@
   </header>
   <form class="bookmark-form">
     <input
+      type="text"
+      name="title"
+      id="title-input"
+      placeholder="Enter a title"
+    >
+    <input
       type="url"
       name="url"
       id="url-input"
       placeholder="Enter URL"
-      
       required
     >
     <div class="form-buttons">
-      <button id="add-bookmark">Add Bookmark</button>
-      <button id="delete-all">Delete All Bookmarks</button>
+      <button id="add-bookmark">Add</button>
+      <button id="delete-all">Delete All</button>
     </div>
   </form>
   <ul id="bookmark-list">
