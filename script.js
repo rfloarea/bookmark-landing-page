@@ -8,20 +8,7 @@ const bookmarkListElement = document.querySelector('#bookmark-list');
 addBookmarkBtn.addEventListener('click', addBookmark);
 deleteAllBookmarksBtn.addEventListener('click', deleteAllBookmarks);
 
-const bookmarksInStorage = [
-  {
-    title: "Page Title 1",
-    url: "url 1",
-  },
-  {
-    title: "Page Title 2",
-    url: "url 2",
-  },
-  {
-    title: "Page Title 3",
-    url: "url 3",
-  },
-]
+const bookmarksInStorage = [];
 
 window.onload = () => {
   console.log('page loaded')
@@ -84,6 +71,15 @@ function addBookmark() {
   renderList(bookmarksInStorage)
 };
 
+function deleteAllBookmarks() {
+  console.log('delete all bookmarks');
+  localStorage.clear();
+  while (bookmarkListElement.firstChild) {
+    bookmarkListElement.removeChild(bookmarkListElement.firstChild);
+  };
+  localStorage.setItem('bookmark-items', JSON.stringify(bookmarksInStorage));
+};
+
 // TODO
 function handleEditBookmark(title, url) {
   // find object in array with matching title and url
@@ -101,13 +97,4 @@ function handleDeleteBookmark() {
   // find correct item
   // remove it: localStorage.removeItem(key)
   // update list of bookmarks
-};
-
-
-
-// TODO
-function deleteAllBookmarks() {
-  console.log('delete all bookmarks');
-  localStorage.clear();
-  // render empty list: BookmarkList();
 };
