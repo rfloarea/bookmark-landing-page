@@ -1,17 +1,13 @@
 console.log("connected")
 
-// Sources of data
 const urlInput = document.querySelector('#url-input');
 const titleInput = document.querySelector('#title-input');
 const addBookmarkBtn = document.querySelector('#add-bookmark');
 const deleteAllBookmarksBtn = document.querySelector('#delete-all');
 const bookmarkListElement = document.querySelector('#bookmark-list');
-console.log(bookmarkListElement)
 addBookmarkBtn.addEventListener('click', storeBookmark);
 deleteAllBookmarksBtn.addEventListener('click', deleteAllBookmarks);
 
-// initialize our data structure for local storage
-// currently dummy data
 const bookmarkObjects = [
   {
     title: "Page Title 1",
@@ -27,38 +23,28 @@ const bookmarkObjects = [
   },
 ]
 
-// TODO: initialize local storage on window load
 window.onload = () => {
   console.log('page loaded')
   if (localStorage.length == 0) {
-    console.log(bookmarkObjects)
     localStorage.setItem('bookmark-objects', JSON.stringify(bookmarkObjects));
-    // for testing
-    renderList(bookmarkObjects)
+    console.log('local storage initialized')
   } else {
     const bookmarkObjects = JSON.parse(localStorage.getItem('bookmark-objects'));
-    console.log(bookmarkObjects)
+    console.log('bookmarkObjects gotten from local storage', bookmarkObjects)
     renderList(bookmarkObjects)
   }
 }
 
 function renderList(bookmarks) {
-  
   bookmarks.map((bookmark) => {
     const markup = Bookmark(bookmark.title, bookmark.url);
-    console.log(markup)
-    const fragment = document.createDocumentFragment();
     const li = document.createElement('li');
     li.setAttribute('class', 'bookmark');
     li.innerHTML = markup;
-    fragment.appendChild(li);
-    console.log(li)
     bookmarkListElement.appendChild(li);
   });
-
 };
 
-// TODO: use onclick handlers for edit and delete?
 function Bookmark(title, url) {
   const markup = 
   `
