@@ -5,25 +5,93 @@ const urlInput = document.querySelector('#url-input');
 const titleInput = document.querySelector('#title-input');
 const addBookmarkBtn = document.querySelector('#add-bookmark');
 const deleteAllBookmarksBtn = document.querySelector('#delete-all');
-const bookmarkList = document.querySelector('#bookmark-list');
+const bookmarkListElement = document.querySelector('#bookmark-list');
+console.log(bookmarkListElement)
 addBookmarkBtn.addEventListener('click', storeBookmark);
 deleteAllBookmarksBtn.addEventListener('click', deleteAllBookmarks);
 
-// TODO: initialize local storage on window load
-
 // initialize our data structure for local storage
-const bookmarkItemList = [
+// currently dummy data
+const bookmarkObjects = [
   {
-    markup: `<p>title<p>
-    <a href="" target="_blank" class="url">url</a>
-    <div class="button-group">
-      <button>Edit</button>
-      <button>Delete</button>
-    </div>`
+    title: "Page Title 1",
+    url: "url 1",
+  },
+  {
+    title: "Page Title 2",
+    url: "url 2",
+  },
+  {
+    title: "Page Title 3",
+    url: "url 3",
   },
 ]
 
-// TODO: move our bookmark object into storage
+// TODO: initialize local storage on window load
+window.onload = () => {
+  console.log('page loaded')
+  if (localStorage.length == 0) {
+    console.log(bookmarkObjects)
+    localStorage.setItem('bookmark-objects', JSON.stringify(bookmarkObjects));
+    // for testing
+    renderList(bookmarkObjects)
+  } else {
+    const bookmarkObjects = JSON.parse(localStorage.getItem('bookmark-objects'));
+    console.log(bookmarkObjects)
+    renderList(bookmarkObjects)
+  }
+}
+
+function renderList(bookmarks) {
+  
+  bookmarks.map((bookmark) => {
+    const markup = Bookmark(bookmark.title, bookmark.url);
+    console.log(markup)
+    const fragment = document.createDocumentFragment();
+    const li = document.createElement('li');
+    li.setAttribute('class', 'bookmark');
+    li.innerHTML = markup;
+    fragment.appendChild(li);
+    console.log(li)
+    bookmarkListElement.appendChild(li);
+  });
+
+};
+
+// TODO: use onclick handlers for edit and delete?
+function Bookmark(title, url) {
+  const markup = 
+  `
+    <p>${title}<p>
+    <a href="${url}" target="_blank" class="url">${url}</a>
+    <div class="button-group">
+      <button>Edit</button>
+      <button>Delete</button>
+    </div>
+  `
+  return markup;
+};
+
+// TODO
+function handleEditBookmark(title, url) {
+  // find object in array with matching title and url
+  // get new data
+  const newTitle = prompt("Edit title");
+  const newUrl = prompt("Edit url");
+  // update our array with new data
+  // clear local storage
+  // store newArray
+  // trigger renderList(newArray)
+};
+
+// TODO
+function handleDeleteBookmark() {
+  // find correct item
+  // remove it: localStorage.removeItem(key)
+  // update list of bookmarks
+};
+
+// TODO
 function storeBookmark() {
   if (!urlInput.value) {
     return
@@ -40,51 +108,9 @@ function storeBookmark() {
   Bookmark(url, title);
 };
 
-// TODO: render our list of bookmarks from storage
-function BookmarkList() {
-// if there are items in local storage,
-// map over them using Bookmark() to render each item 
-};
-
-// TODO: clear local storage and trigger rerender
+// TODO
 function deleteAllBookmarks() {
   console.log('delete all bookmarks');
   localStorage.clear();
   // render empty list: BookmarkList();
-};
-
-// TODO: setup our Bookmark component
-function Bookmark(url, title) {
-  let bookmarkMarkup = 
-  `
-    <p>${title}<p>
-    <a href="${url}" target="_blank" class="url">${url}</a>
-    <div class="button-group">
-      <button>Edit</button>
-      <button>Delete</button>
-    </div>
-  `
-  const newBookmark = document.createElement('li');
-  newBookmark.setAttribute('class', 'bookmark')
-  bookmarkList.appendChild(newBookmark);
-  newBookmark.innerHTML = bookmarkMarkup;
-  urlInput.value = '';
-  titleInput.value= '';
-};
-
-// TODO: edit specified bookmark item in storage,
-// and trigger rerender of list
-function handleEditBookmark() {
-  // access correct item from storage
-  // edit it
-  // put it back
-  // update list
-};
-
-// TODO: delete specified bookmark item from storage,
-// and trigger rerender of list
-function handleDeleteBookmark() {
-  // find correct item
-  // remove it: localStorage.removeItem(key)
-  // update list of bookmarks
 };
