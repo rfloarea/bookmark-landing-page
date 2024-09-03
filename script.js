@@ -5,10 +5,10 @@ const titleInput = document.querySelector('#title-input');
 const addBookmarkBtn = document.querySelector('#add-bookmark');
 const deleteAllBookmarksBtn = document.querySelector('#delete-all');
 const bookmarkListElement = document.querySelector('#bookmark-list');
-addBookmarkBtn.addEventListener('click', storeBookmark);
+addBookmarkBtn.addEventListener('click', addBookmark);
 deleteAllBookmarksBtn.addEventListener('click', deleteAllBookmarks);
 
-const bookmarkObjects = [
+const bookmarksInStorage = [
   {
     title: "Page Title 1",
     url: "url 1",
@@ -26,16 +26,23 @@ const bookmarkObjects = [
 window.onload = () => {
   console.log('page loaded')
   if (localStorage.length == 0) {
-    localStorage.setItem('bookmark-objects', JSON.stringify(bookmarkObjects));
+    localStorage.setItem('bookmark-items', JSON.stringify(bookmarksInStorage));
+    renderList(bookmarksInStorage)
     console.log('local storage initialized')
   } else {
-    const bookmarkObjects = JSON.parse(localStorage.getItem('bookmark-objects'));
-    console.log('bookmarkObjects gotten from local storage', bookmarkObjects)
-    renderList(bookmarkObjects)
+    const bookmarksInStorage = JSON.parse(localStorage.getItem('bookmark-items'));
+    console.log('bookmark-items from local storage', bookmarksInStorage)
+    renderList(bookmarksInStorage)
+    console.log('stored items rendered', bookmarksInStorage)
   }
 }
 
 function renderList(bookmarks) {
+  // clear our node list
+  while (bookmarkListElement.firstChild) {
+    bookmarkListElement.removeChild(bookmarkListElement.firstChild);
+  };
+  // rebuild our node list
   bookmarks.map((bookmark) => {
     const markup = Bookmark(bookmark.title, bookmark.url);
     const li = document.createElement('li');
@@ -58,6 +65,25 @@ function Bookmark(title, url) {
   return markup;
 };
 
+function addBookmark() {
+  if (!titleInput.value || !urlInput.value) {
+    return
+  }
+  let url = urlInput.value;
+  let title = titleInput.value;
+  // get stored items
+  let bookmarksInStorage = JSON.parse(localStorage.getItem('bookmark-items'));
+  // update our items array
+  bookmarksInStorage.push({title: `${title}`, url: `${url}`,},)
+  // clear local storage
+  localStorage.clear();
+  // set new items array into local storage
+  localStorage.setItem('bookmark-items', JSON.stringify(bookmarksInStorage))
+  console.log(bookmarksInStorage);
+  // trigger rerender of items to DOM
+  renderList(bookmarksInStorage)
+};
+
 // TODO
 function handleEditBookmark(title, url) {
   // find object in array with matching title and url
@@ -77,22 +103,7 @@ function handleDeleteBookmark() {
   // update list of bookmarks
 };
 
-// TODO
-function storeBookmark() {
-  if (!urlInput.value) {
-    return
-  }
-  console.log('add bookmark');
 
-  localStorage.setItem('bookmark-list', JSON.stringify(bookmarkItemList))
-  let storedBookmarks = JSON.parse(localStorage.getItem('bookmark-list'));
-  console.log(storedBookmarks)
-
-  let url = urlInput.value;
-  let title = titleInput.value;
-
-  Bookmark(url, title);
-};
 
 // TODO
 function deleteAllBookmarks() {
