@@ -34,6 +34,7 @@ function renderList(bookmarks) {
     const markup = Bookmark(bookmark.title, bookmark.url);
     const li = document.createElement('li');
     li.setAttribute('class', 'bookmark');
+    li.setAttribute('id', bookmark.id);
     li.innerHTML = markup;
     bookmarkListElement.appendChild(li);
   });
@@ -46,7 +47,7 @@ function Bookmark(title, url) {
     <a href="${url}" target="_blank" class="url">${url}</a>
     <div class="button-group">
       <button>Edit</button>
-      <button>Delete</button>
+      <button onclick="handleDelete(this.parentNode.parentNode.id)">Delete</button>
     </div>
   `
   return markup;
@@ -58,26 +59,33 @@ function addBookmark() {
   }
   let url = urlInput.value;
   let title = titleInput.value;
-  // get stored items
   let bookmarksInStorage = JSON.parse(localStorage.getItem('bookmark-items'));
-  // update our items array
-  bookmarksInStorage.push({title: `${title}`, url: `${url}`,},)
-  // clear local storage
+  bookmarksInStorage.push({id: Math.random(), title: `${title}`, url: `${url}`,},)
   localStorage.clear();
-  // set new items array into local storage
   localStorage.setItem('bookmark-items', JSON.stringify(bookmarksInStorage))
-  console.log(bookmarksInStorage);
-  // trigger rerender of items to DOM
   renderList(bookmarksInStorage)
 };
 
 function deleteAllBookmarks() {
   console.log('delete all bookmarks');
-  localStorage.clear();
+  localStorage.removeItem('bookmark-items');
   while (bookmarkListElement.firstChild) {
     bookmarkListElement.removeChild(bookmarkListElement.firstChild);
   };
   localStorage.setItem('bookmark-items', JSON.stringify(bookmarksInStorage));
+};
+
+function handleDelete(nodeId) {
+  console.log('nodeId', nodeId);
+  // get stored array
+  let storedItems = JSON.parse(localStorage.getItem('bookmark-items'));
+  // create a new array of the objects whose id prop does not match the nodeId
+  const newArray = storedItems.filter(x => x.id != nodeId);
+  console.table(newArray);
+  // store this new array
+  localStorage.setItem('bookmark-items', JSON.stringify(newArray));
+  // render this new array
+  renderList(newArray);
 };
 
 // TODO
@@ -90,11 +98,4 @@ function handleEditBookmark(title, url) {
   // clear local storage
   // store newArray
   // trigger renderList(newArray)
-};
-
-// TODO
-function handleDeleteBookmark() {
-  // find correct item
-  // remove it: localStorage.removeItem(key)
-  // update list of bookmarks
 };
