@@ -10,6 +10,7 @@ deleteAllBookmarksBtn.addEventListener('click', deleteAllBookmarks);
 
 const bookmarksInStorage = [];
 
+// DONE
 window.onload = () => {
   console.log('page loaded')
   if (localStorage.length == 0) {
@@ -24,6 +25,7 @@ window.onload = () => {
   }
 }
 
+// DONE
 function renderList(bookmarks) {
   // clear our node list
   while (bookmarkListElement.firstChild) {
@@ -40,19 +42,21 @@ function renderList(bookmarks) {
   });
 };
 
+// DONE
 function Bookmark(title, url) {
   const markup = 
   `
     <p>${title}<p>
     <a href="${url}" target="_blank" class="url">${url}</a>
     <div class="button-group">
-      <button>Edit</button>
+      <button onclick="handleEdit(this.parentNode.parentNode.id)">Edit</button>
       <button onclick="handleDelete(this.parentNode.parentNode.id)">Delete</button>
     </div>
   `
   return markup;
 };
 
+// DONE
 function addBookmark() {
   if (!titleInput.value || !urlInput.value) {
     return
@@ -66,6 +70,7 @@ function addBookmark() {
   renderList(bookmarksInStorage)
 };
 
+// DONE
 function deleteAllBookmarks() {
   console.log('delete all bookmarks');
   localStorage.removeItem('bookmark-items');
@@ -75,6 +80,7 @@ function deleteAllBookmarks() {
   localStorage.setItem('bookmark-items', JSON.stringify(bookmarksInStorage));
 };
 
+// DONE
 function handleDelete(nodeId) {
   console.log('nodeId', nodeId);
   // get stored array
@@ -88,14 +94,29 @@ function handleDelete(nodeId) {
   renderList(newArray);
 };
 
-// TODO
-function handleEditBookmark(title, url) {
-  // find object in array with matching title and url
-  // get new data
-  const newTitle = prompt("Edit title");
-  const newUrl = prompt("Edit url");
-  // update our array with new data
-  // clear local storage
-  // store newArray
-  // trigger renderList(newArray)
+// DONE
+function handleEdit(nodeId) {
+  // get stored items array
+  const storedItems = JSON.parse(localStorage.getItem('bookmark-items'));
+  // get new values
+  const newTitle = prompt('Edit title');
+  const newUrl = prompt('Edit url');
+  // match our node id with an item id
+  const newArray = storedItems.map(item => {
+    if (item.id == nodeId) {
+      return {...item, title: `${newTitle}`, url: `${newUrl}`};
+    }
+    return item;
+  });
+  console.table(newArray); // works!
+  // clear DOM
+  while (bookmarkListElement.firstChild) {
+    bookmarkListElement.removeChild(bookmarkListElement.firstChild);
+  };
+  // render DOM
+  renderList(newArray);
+  // clear storage
+  localStorage.clear();
+  // set new storage
+  localStorage.setItem('bookmark-items', JSON.stringify(newArray));
 };
