@@ -1,12 +1,10 @@
-const urlInput = document.querySelector('#url-input');
-const titleInput = document.querySelector('#title-input');
-const addBookmarkBtn = document.querySelector('#add-bookmark');
-const deleteAllBookmarksBtn = document.querySelector('#delete-all');
-const bookmarkListElement = document.querySelector('#bookmark-list');
-addBookmarkBtn.addEventListener('click', addBookmark);
-deleteAllBookmarksBtn.addEventListener('click', deleteAllBookmarks);
-
-
+const inputTitle = document.querySelector('#title-input');
+const inputUrl = document.querySelector('#url-input');
+const btnAddBookmark = document.querySelector('#add-bookmark');
+const btnDeleteAllBookmarks = document.querySelector('#delete-all');
+const elementBookmarkList = document.querySelector('#bookmark-list');
+btnAddBookmark.addEventListener('click', handleAddBookmark);
+btnDeleteAllBookmarks.addEventListener('click', handleDeleteAllBookmarks);
 
 window.onload = () => {
   if (!localStorage) {
@@ -31,28 +29,22 @@ function Bookmark(title, url) {
   return markup;
 };
 
-function addBookmark() {
-  if (!titleInput.value || !urlInput.value) {return}
-  let url = urlInput.value;
-  let title = titleInput.value;
+function handleAddBookmark() {
+  if (!inputTitle.value || !inputUrl.value) {return}
+  let url = inputUrl.value;
+  let title = inputTitle.value;
   let bookmarkItems = JSON.parse(localStorage.getItem('bookmark-items'));
   bookmarkItems.push({id: Math.random(), title: `${title}`, url: `${url}`,},)
   replaceStorageAndDOM(bookmarkItems);
 };
 
-function deleteAllBookmarks() {
-  while (bookmarkListElement.firstChild) {
-    bookmarkListElement.removeChild(bookmarkListElement.firstChild);
+function handleDeleteAllBookmarks() {
+  while (elementBookmarkList.firstChild) {
+    elementBookmarkList.removeChild(elementBookmarkList.firstChild);
   };
   localStorage.clear();
   const bookmarkItems = [];
   localStorage.setItem('bookmark-items', JSON.stringify(bookmarkItems));
-};
-
-function handleDelete(nodeId) {
-  const bookmarkItems = JSON.parse(localStorage.getItem('bookmark-items'));
-  const newArray = bookmarkItems.filter(item => item.id != nodeId);
-  replaceStorageAndDOM(newArray);
 };
 
 function handleEdit(nodeId) {
@@ -69,9 +61,15 @@ function handleEdit(nodeId) {
   replaceStorageAndDOM(newArray);
 };
 
+function handleDelete(nodeId) {
+  const bookmarkItems = JSON.parse(localStorage.getItem('bookmark-items'));
+  const newArray = bookmarkItems.filter(item => item.id != nodeId);
+  replaceStorageAndDOM(newArray);
+};
+
 function renderList(bookmarks) {
-  while (bookmarkListElement.firstChild) {
-    bookmarkListElement.removeChild(bookmarkListElement.firstChild);
+  while (elementBookmarkList.firstChild) {
+    elementBookmarkList.removeChild(elementBookmarkList.firstChild);
   };
   bookmarks.map((bookmark) => {
     const markup = Bookmark(bookmark.title, bookmark.url);
@@ -79,13 +77,13 @@ function renderList(bookmarks) {
     li.setAttribute('class', 'bookmark');
     li.setAttribute('id', bookmark.id);
     li.innerHTML = markup;
-    bookmarkListElement.appendChild(li);
+    elementBookmarkList.appendChild(li);
   });
 };
 
 function replaceStorageAndDOM(newArray) {
-  while (bookmarkListElement.firstChild) {
-    bookmarkListElement.removeChild(bookmarkListElement.firstChild);
+  while (elementBookmarkList.firstChild) {
+    elementBookmarkList.removeChild(elementBookmarkList.firstChild);
   };
   localStorage.clear();
   renderList(newArray);
