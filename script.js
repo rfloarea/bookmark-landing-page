@@ -1,5 +1,3 @@
-console.log("connected")
-
 const urlInput = document.querySelector('#url-input');
 const titleInput = document.querySelector('#title-input');
 const addBookmarkBtn = document.querySelector('#add-bookmark');
@@ -10,28 +8,20 @@ deleteAllBookmarksBtn.addEventListener('click', deleteAllBookmarks);
 
 const bookmarksInStorage = [];
 
-// DONE
 window.onload = () => {
-  console.log('page loaded')
-  if (localStorage.length == 0) {
+  if (!localStorage) {
     localStorage.setItem('bookmark-items', JSON.stringify(bookmarksInStorage));
     renderList(bookmarksInStorage)
-    console.log('local storage initialized')
   } else {
     const bookmarksInStorage = JSON.parse(localStorage.getItem('bookmark-items'));
-    console.log('bookmark-items from local storage', bookmarksInStorage)
-    renderList(bookmarksInStorage)
-    console.log('stored items rendered', bookmarksInStorage)
+    renderList(bookmarksInStorage);
   }
-}
+};
 
-// DONE
 function renderList(bookmarks) {
-  // clear our node list
   while (bookmarkListElement.firstChild) {
     bookmarkListElement.removeChild(bookmarkListElement.firstChild);
   };
-  // rebuild our node list
   bookmarks.map((bookmark) => {
     const markup = Bookmark(bookmark.title, bookmark.url);
     const li = document.createElement('li');
@@ -42,7 +32,6 @@ function renderList(bookmarks) {
   });
 };
 
-// DONE
 function Bookmark(title, url) {
   const markup = 
   `
@@ -56,7 +45,6 @@ function Bookmark(title, url) {
   return markup;
 };
 
-// DONE
 function addBookmark() {
   if (!titleInput.value || !urlInput.value) {
     return
@@ -70,7 +58,6 @@ function addBookmark() {
   renderList(bookmarksInStorage)
 };
 
-// DONE
 function deleteAllBookmarks() {
   console.log('delete all bookmarks');
   localStorage.removeItem('bookmark-items');
@@ -80,43 +67,28 @@ function deleteAllBookmarks() {
   localStorage.setItem('bookmark-items', JSON.stringify(bookmarksInStorage));
 };
 
-// DONE
 function handleDelete(nodeId) {
-  console.log('nodeId', nodeId);
-  // get stored array
   let storedItems = JSON.parse(localStorage.getItem('bookmark-items'));
-  // create a new array of the objects whose id prop does not match the nodeId
-  const newArray = storedItems.filter(x => x.id != nodeId);
-  console.table(newArray);
-  // store this new array
+  const newArray = storedItems.filter(item => item.id != nodeId);
   localStorage.setItem('bookmark-items', JSON.stringify(newArray));
-  // render this new array
   renderList(newArray);
 };
 
-// DONE
 function handleEdit(nodeId) {
-  // get stored items array
   const storedItems = JSON.parse(localStorage.getItem('bookmark-items'));
-  // get new values
   const newTitle = prompt('Edit title');
   const newUrl = prompt('Edit url');
-  // match our node id with an item id
+  if (!newTitle || !newUrl) {return};
   const newArray = storedItems.map(item => {
     if (item.id == nodeId) {
       return {...item, title: `${newTitle}`, url: `${newUrl}`};
     }
     return item;
   });
-  console.table(newArray); // works!
-  // clear DOM
   while (bookmarkListElement.firstChild) {
     bookmarkListElement.removeChild(bookmarkListElement.firstChild);
   };
-  // render DOM
   renderList(newArray);
-  // clear storage
   localStorage.clear();
-  // set new storage
   localStorage.setItem('bookmark-items', JSON.stringify(newArray));
 };
