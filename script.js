@@ -14,6 +14,7 @@ window.onload = () => {
     const bookmarkItems = JSON.parse(localStorage.getItem('bookmark-items'));
     renderList(bookmarkItems);
   }
+  document.getElementById('title-input').focus();
 };
 
 function Bookmark(title, url) {
@@ -31,10 +32,10 @@ function Bookmark(title, url) {
 
 function handleAddBookmark() {
   if (!inputTitle.value || !inputUrl.value) {return}
-  let url = inputUrl.value;
-  let title = inputTitle.value;
-  let bookmarkItems = JSON.parse(localStorage.getItem('bookmark-items'));
-  bookmarkItems.push({id: Math.random(), title: `${title}`, url: `${url}`,},)
+  const url = inputUrl.value;
+  const title = inputTitle.value;
+  const bookmarkItems = JSON.parse(localStorage.getItem('bookmark-items'));
+  bookmarkItems.push({id: Math.random(), title: `${title}`, url: `${url}`,},);
   replaceStorageAndDOM(bookmarkItems);
 };
 
