@@ -6,30 +6,16 @@ const bookmarkListElement = document.querySelector('#bookmark-list');
 addBookmarkBtn.addEventListener('click', addBookmark);
 deleteAllBookmarksBtn.addEventListener('click', deleteAllBookmarks);
 
-const bookmarksInStorage = [];
+
 
 window.onload = () => {
   if (!localStorage) {
-    localStorage.setItem('bookmark-items', JSON.stringify(bookmarksInStorage));
-    renderList(bookmarksInStorage)
+    const bookmarkItems = [];
+    localStorage.setItem('bookmark-items', JSON.stringify(bookmarkItems));
   } else {
-    const bookmarksInStorage = JSON.parse(localStorage.getItem('bookmark-items'));
-    renderList(bookmarksInStorage);
+    const bookmarkItems = JSON.parse(localStorage.getItem('bookmark-items'));
+    renderList(bookmarkItems);
   }
-};
-
-function renderList(bookmarks) {
-  while (bookmarkListElement.firstChild) {
-    bookmarkListElement.removeChild(bookmarkListElement.firstChild);
-  };
-  bookmarks.map((bookmark) => {
-    const markup = Bookmark(bookmark.title, bookmark.url);
-    const li = document.createElement('li');
-    li.setAttribute('class', 'bookmark');
-    li.setAttribute('id', bookmark.id);
-    li.innerHTML = markup;
-    bookmarkListElement.appendChild(li);
-  });
 };
 
 function Bookmark(title, url) {
@@ -46,49 +32,62 @@ function Bookmark(title, url) {
 };
 
 function addBookmark() {
-  if (!titleInput.value || !urlInput.value) {
-    return
-  }
+  if (!titleInput.value || !urlInput.value) {return}
   let url = urlInput.value;
   let title = titleInput.value;
-  let bookmarksInStorage = JSON.parse(localStorage.getItem('bookmark-items'));
-  bookmarksInStorage.push({id: Math.random(), title: `${title}`, url: `${url}`,},)
-  localStorage.clear();
-  localStorage.setItem('bookmark-items', JSON.stringify(bookmarksInStorage))
-  renderList(bookmarksInStorage)
+  let bookmarkItems = JSON.parse(localStorage.getItem('bookmark-items'));
+  bookmarkItems.push({id: Math.random(), title: `${title}`, url: `${url}`,},)
+  replaceStorageAndDOM(bookmarkItems);
 };
 
 function deleteAllBookmarks() {
-  console.log('delete all bookmarks');
-  localStorage.removeItem('bookmark-items');
   while (bookmarkListElement.firstChild) {
     bookmarkListElement.removeChild(bookmarkListElement.firstChild);
   };
-  localStorage.setItem('bookmark-items', JSON.stringify(bookmarksInStorage));
+  localStorage.clear();
+  const bookmarkItems = [];
+  localStorage.setItem('bookmark-items', JSON.stringify(bookmarkItems));
 };
 
 function handleDelete(nodeId) {
-  let storedItems = JSON.parse(localStorage.getItem('bookmark-items'));
-  const newArray = storedItems.filter(item => item.id != nodeId);
-  localStorage.setItem('bookmark-items', JSON.stringify(newArray));
-  renderList(newArray);
+  const bookmarkItems = JSON.parse(localStorage.getItem('bookmark-items'));
+  const newArray = bookmarkItems.filter(item => item.id != nodeId);
+  replaceStorageAndDOM(newArray);
 };
 
 function handleEdit(nodeId) {
-  const storedItems = JSON.parse(localStorage.getItem('bookmark-items'));
+  const bookmarkItems = JSON.parse(localStorage.getItem('bookmark-items'));
   const newTitle = prompt('Edit title');
   const newUrl = prompt('Edit url');
   if (!newTitle || !newUrl) {return};
-  const newArray = storedItems.map(item => {
+  const newArray = bookmarkItems.map(item => {
     if (item.id == nodeId) {
       return {...item, title: `${newTitle}`, url: `${newUrl}`};
     }
     return item;
   });
+  replaceStorageAndDOM(newArray);
+};
+
+function renderList(bookmarks) {
   while (bookmarkListElement.firstChild) {
     bookmarkListElement.removeChild(bookmarkListElement.firstChild);
   };
-  renderList(newArray);
+  bookmarks.map((bookmark) => {
+    const markup = Bookmark(bookmark.title, bookmark.url);
+    const li = document.createElement('li');
+    li.setAttribute('class', 'bookmark');
+    li.setAttribute('id', bookmark.id);
+    li.innerHTML = markup;
+    bookmarkListElement.appendChild(li);
+  });
+};
+
+function replaceStorageAndDOM(newArray) {
+  while (bookmarkListElement.firstChild) {
+    bookmarkListElement.removeChild(bookmarkListElement.firstChild);
+  };
   localStorage.clear();
+  renderList(newArray);
   localStorage.setItem('bookmark-items', JSON.stringify(newArray));
 };
